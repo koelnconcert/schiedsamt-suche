@@ -4,7 +4,7 @@
   </div>
   <div>
     {{ filtered.length }} / {{ data.streetnumbers.length }}
-    <table v-if="0 < filtered.length && filtered.length < 100">
+    <table v-if="0 < filtered.length && filtered.length < 200">
       <thead>
         <tr>
           <th>Straßenname</th>
@@ -69,7 +69,7 @@ const filtered = computed(() => {
 
   console.debug("search", search.value, { parts, words, numbers, postalCodes })
 
-  if (words.length == 0 ||
+  if ((words.length == 0 && postalCodes.length == 0)||
     numbers.length > 1 ||
     postalCodes.length > 1 ||
     words.length + numbers.length + postalCodes.length < parts.length) {
