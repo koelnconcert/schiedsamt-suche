@@ -9,6 +9,7 @@
         <tr>
           <th>Straßenname</th>
           <th>Hausnummern</th>
+          <th>Postleitzahl</th>
           <th>Stadtbezirk</th>
           <th>Stadtteil</th>
         </tr>
@@ -17,6 +18,7 @@
         <tr v-for="entry in filtered" :key="entry.id">
           <td>{{ entry.street.name }}</td>
           <td>{{ numbersLabel(entry.numbers) }}</td>
+          <td>{{ entry.postalCode }}</td>
           <td>{{ entry.subdivision.stadtbezirk }}</td>
           <td>{{ entry.subdivision.stadtteil }}</td>
         </tr>
@@ -61,13 +63,21 @@ const { data } = await useFetch('/data/hannover.json', {
 
 const filtered = computed(() => {
   const parts = search.value.trim().split(' ')
-  const words = parts.filter(part => part.match(/^[a-z]/)).map(toWordSearchString)
-  const numbers = parts.filter(part => part.match(/^[0-9]/)).map(toNumbersSearchString)
-  if (numbers.length > 1 || words.length == 0) {
+  const words = parts.filter(part => part.match(/^[^0-9]/)).map(toWordSearchString)
+  const numbers = parts.filter(part => part.match(/^[0-9]{1,3}[a-z]*$/i)).map(toNumbersSearchString)
+  const postalCodes = parts.filter(part => part.match(/^[0-9]{5}$/))
+
+  console.debug("search", search.value, { parts, words, numbers, postalCodes })
+
+  if (words.length == 0 ||
+    numbers.length > 1 ||
+    postalCodes.length > 1 ||
+    words.length + numbers.length + postalCodes.length < parts.length) {
     return []
   }
   const number = numbers[0]
   const even = Number.parseInt(number) % 2 == 0
+  const postalCode = postalCodes[0]
 
   return data.value.streetnumbers.filter((entry) => {
     let streetName = entry.street.searchString
@@ -83,6 +93,11 @@ const filtered = computed(() => {
         return false
       }
       if ((even && !entry.numbers.even) || (!even && !entry.numbers.odd)) {
+        return false
+      }
+    }
+    if (postalCode) {
+      if (entry.postalCode !== postalCode) {
         return false
       }
     }
