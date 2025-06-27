@@ -114,7 +114,7 @@ function numbersLabel(numbers) {
 
   const evenOddLabel = (even && !odd) ? 'gerade' : (!even && odd) ? 'ungerade' : null
 
-  if (from === '000' && to === '999') {
+  if ((from === '000' || from === '001') && to === '999') {
     return evenOddLabel ?? 'alle'
   }
 
