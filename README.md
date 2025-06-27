@@ -13,5 +13,6 @@ Entwicklung und Installation
 ```bash
 npm install
 npm run data-download
+npm run data-convert
 npm run dev
 ```

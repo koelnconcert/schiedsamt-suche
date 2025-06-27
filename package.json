@@ -8,11 +8,15 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "data-download": "./data-download.sh"
+    "data-download": "./data-download.sh",
+    "data-convert": "node data-convert.js"
   },
   "dependencies": {
     "nuxt": "^3.17.5",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "exceljs": "^4.4.0"
   }
 }

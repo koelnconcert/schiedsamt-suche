@@ -1,6 +1,6 @@
 # app caches
-
 download
+src/public/data
 
 
 # Nuxt dev/build outputs
