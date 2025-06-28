@@ -17,7 +17,7 @@
       <tbody>
         <tr v-for="entry in filtered" :key="entry.id">
           <td>{{ entry.street.name }}</td>
-          <td>{{ numbersLabel(entry.numbers) }}</td>
+          <td>{{ labelNumbers(entry) }}</td>
           <td>{{ entry.postalCode }}</td>
           <td>{{ entry.subdivision.stadtbezirk }}</td>
           <td>{{ entry.subdivision.stadtteil }}</td>
@@ -109,8 +109,8 @@ function trimLeadingZeros(str) {
   return str.replaceAll(/^0+/g, '') || '0'
 }
 
-function numbersLabel(numbers) {
-  const { from, to, even, odd } = numbers
+function labelNumbers(entry) {
+  const { from, to, even, odd } = entry.numbers
 
   const evenOddLabel = (even && !odd) ? 'gerade' : (!even && odd) ? 'ungerade' : null
 
@@ -118,11 +118,11 @@ function numbersLabel(numbers) {
     return evenOddLabel ?? 'alle'
   }
 
-  let label = trimLeadingZeros(numbers.from)
+  let label = trimLeadingZeros(from)
 
   if (from !== to) {
     label += ' bis '
-    label += numbers.to === '999' ? 'Ende' : trimLeadingZeros(numbers.to)
+    label += to === '999' ? 'Ende' : trimLeadingZeros(to)
     if (evenOddLabel) {
       label += ' (' + evenOddLabel + ')'
     }
