@@ -19,8 +19,8 @@
           <td>{{ entry.street.name }}</td>
           <td>{{ labelNumbers(entry) }}</td>
           <td>{{ entry.postalCode }}</td>
-          <td>{{ entry.subdivision.stadtbezirk }}</td>
-          <td>{{ entry.subdivision.stadtteil }}</td>
+          <td>{{ labelStadtbezirk(entry) }}</td>
+          <td>{{ labelStadtteil(entry) }}</td>
         </tr>
       </tbody>
     </table>
@@ -129,6 +129,26 @@ function labelNumbers(entry) {
   }
 
   return label
+}
+
+function labelStadtbezirk(entry) {
+  return labelSubdivision(entry, 'stadtbezirk')
+}
+
+function labelStadtteil(entry) {
+  return labelSubdivision(entry, 'stadtteil')
+}
+
+function labelSubdivision(entry, subdivisionType) {
+  const id = entry.subdivision[subdivisionType]
+  if (!id) {
+    return ''
+  }
+  const name = data.value.subdivisions[subdivisionType][id]
+  if (!name) {
+    return id
+  }
+  return name + ' (' + id + ')'
 }
 </script>
 
