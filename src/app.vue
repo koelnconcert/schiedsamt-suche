@@ -1,30 +1,32 @@
 <template>
-  <div>
-    <input v-model="search" />
-  </div>
-  <div>
-    {{ filtered.length }} / {{ data.streetnumbers.length }}
-    <table v-if="0 < filtered.length && filtered.length < 200">
-      <thead>
-        <tr>
-          <th>Straßenname</th>
-          <th>Hausnummern</th>
-          <th>Postleitzahl</th>
-          <th>Stadtbezirk</th>
-          <th>Stadtteil</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="entry in filtered" :key="entry.id">
-          <td>{{ entry.street.name }}</td>
-          <td>{{ labelNumbers(entry) }}</td>
-          <td>{{ entry.postalCode }}</td>
-          <td>{{ labelStadtbezirk(entry) }}</td>
-          <td>{{ labelStadtteil(entry) }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <UApp>
+    <div>
+      <UInput v-model="search" />
+    </div>
+    <div>
+      {{ filtered.length }} / {{ data.streetnumbers.length }}
+      <table v-if="0 < filtered.length && filtered.length < 200">
+        <thead>
+          <tr>
+            <th>Straßenname</th>
+            <th>Hausnummern</th>
+            <th>Postleitzahl</th>
+            <th>Stadtbezirk</th>
+            <th>Stadtteil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="entry in filtered" :key="entry.id">
+            <td>{{ entry.street.name }}</td>
+            <td>{{ labelNumbers(entry) }}</td>
+            <td>{{ entry.postalCode }}</td>
+            <td>{{ labelStadtbezirk(entry) }}</td>
+            <td>{{ labelStadtteil(entry) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </UApp>
 </template>
 
 <script setup>
@@ -69,7 +71,7 @@ const filtered = computed(() => {
 
   console.debug("search", search.value, { parts, words, numbers, postalCodes })
 
-  if ((words.length == 0 && postalCodes.length == 0)||
+  if ((words.length == 0 && postalCodes.length == 0) ||
     numbers.length > 1 ||
     postalCodes.length > 1 ||
     words.length + numbers.length + postalCodes.length < parts.length) {
