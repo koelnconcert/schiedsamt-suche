@@ -2,7 +2,6 @@
   <div>
     <div>
       <UInput v-model="search" />
-      <ColorModeButton/>
     </div>
     <div>
       {{ filtered.length }} / {{ data.streetnumbers.length }}
