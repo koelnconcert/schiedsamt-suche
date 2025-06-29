@@ -88,8 +88,8 @@ const filtered = computed(() => {
   const even = Number.parseInt(number) % 2 == 0
   const postalCode = postalCodes[0]
 
-  return data.value.streetnumbers.filter((entry) => {
-    let streetName = entry.street.searchString
+  return data.value.streetnumbers.filter((row) => {
+    let streetName = row.street.searchString
     for (const word of words) {
       const position = streetName.indexOf(word)
       if (position < 0) {
@@ -98,15 +98,15 @@ const filtered = computed(() => {
       streetName = streetName.substring(position + word.length)
     }
     if (number) {
-      if (entry.numbers.from.localeCompare(number) > 0 || entry.numbers.to.localeCompare(number) < 0) {
+      if (row.numbers.from.localeCompare(number) > 0 || row.numbers.to.localeCompare(number) < 0) {
         return false
       }
-      if ((even && !entry.numbers.even) || (!even && !entry.numbers.odd)) {
+      if ((even && !row.numbers.even) || (!even && !row.numbers.odd)) {
         return false
       }
     }
     if (postalCode) {
-      if (entry.postalCode !== postalCode) {
+      if (row.postalCode !== postalCode) {
         return false
       }
     }
@@ -118,8 +118,8 @@ function trimLeadingZeros(str) {
   return str.replaceAll(/^0+/g, '') || '0'
 }
 
-function labelNumbers(entry) {
-  const { from, to, even, odd } = entry.numbers
+function labelNumbers(row) {
+  const { from, to, even, odd } = row.numbers
 
   const evenOddLabel = (even && !odd) ? 'gerade' : (!even && odd) ? 'ungerade' : null
 
@@ -140,16 +140,16 @@ function labelNumbers(entry) {
   return label
 }
 
-function labelStadtbezirk(entry) {
-  return labelSubdivision(entry, 'stadtbezirk')
+function labelStadtbezirk(row) {
+  return labelSubdivision(row, 'stadtbezirk')
 }
 
-function labelStadtteil(entry) {
-  return labelSubdivision(entry, 'stadtteil')
+function labelStadtteil(row) {
+  return labelSubdivision(row, 'stadtteil')
 }
 
-function labelSubdivision(entry, subdivisionType) {
-  const id = entry.subdivision[subdivisionType]
+function labelSubdivision(row, subdivisionType) {
+  const id = row.subdivision[subdivisionType]
   if (!id) {
     return ''
   }
@@ -160,9 +160,3 @@ function labelSubdivision(entry, subdivisionType) {
   return name + ' (' + id + ')'
 }
 </script>
-
-<style scoped>
-th {
-  text-align: left;
-}
-</style>
