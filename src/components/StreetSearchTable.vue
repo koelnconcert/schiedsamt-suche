@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div>
-      <UInput v-model="query" />
-      {{ filtered.length }} / {{ data.streetnumbers.length }}
+    <div class="mb-1">
+      <UInput class="w-full" v-model="query" placeholder="Nach Adresse suchen..." />
     </div>
-    <UTable v-if="0 < filtered.length && filtered.length < 200" :data="filtered" :columns="columns"/>
+    <template v-if="query.trim().length == 0"></template>
+    <template v-else-if="filtered.length == 0">
+      Keine Ergebnisse
+    </template>
+    <template v-else-if="filtered.length > MAX_RESULTS">
+      Zu viele Ergebnisse ({{ filtered.length }})
+    </template>
+    <UTable v-else :data="filtered" :columns="columns"/>
   </div>
 </template>
 
@@ -12,6 +18,7 @@
 const query = ref('')
 
 const NUMBER_OF_DIGITS = 3
+const MAX_RESULTS = 100
 
 function toWordqueryString(str) {
   return str
