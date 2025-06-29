@@ -1,9 +1,7 @@
 <template>
   <UApp :locale="de">
-    <BaseHeader/>
-    <div class="">
-      <NuxtPage class="m-2"/>
-    </div>
+    <AppHeader/>
+    <NuxtPage class="m-2"/>
   </UApp>
 </template>
 
