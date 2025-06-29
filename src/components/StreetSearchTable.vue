@@ -2,30 +2,9 @@
   <div>
     <div>
       <UInput v-model="search" />
-    </div>
-    <div>
       {{ filtered.length }} / {{ data.streetnumbers.length }}
-      <table v-if="0 < filtered.length && filtered.length < 200">
-        <thead>
-          <tr>
-            <th>Straßenname</th>
-            <th>Hausnummern</th>
-            <th>Postleitzahl</th>
-            <th>Stadtbezirk</th>
-            <th>Stadtteil</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="entry in filtered" :key="entry.id">
-            <td>{{ entry.street.name }}</td>
-            <td>{{ labelNumbers(entry) }}</td>
-            <td>{{ entry.postalCode }}</td>
-            <td>{{ labelStadtbezirk(entry) }}</td>
-            <td>{{ labelStadtteil(entry) }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
+    <UTable v-if="0 < filtered.length && filtered.length < 200" :data="filtered" :columns="columns"/>
   </div>
 </template>
 
@@ -62,6 +41,34 @@ const { data } = await useFetch('/data/hannover.json', {
     return json
   }
 })
+
+const columns = [
+  {
+    id: 'street',
+    header: 'Straße',
+    accessorKey: 'street.name'
+  },
+  {
+    id: 'hausnummern',
+    header: 'Hausnummern',
+    accessorFn: labelNumbers
+  },
+  {
+    id: 'postalCode',
+    header: 'Postleitzahl',
+    accessorKey: 'postalCode'
+  },
+  {
+    id: 'stadtbezirk',
+    header: 'Stadtbezirk',
+    accessorFn: labelStadtbezirk
+  },
+  {
+    id: 'stadtteil',
+    header: 'Stadtteil',
+    accessorFn: labelStadtteil
+  }
+]
 
 const filtered = computed(() => {
   const parts = search.value.trim().split(' ')
