@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <UInput v-model="search" />
+      <UInput v-model="query" />
       {{ filtered.length }} / {{ data.streetnumbers.length }}
     </div>
     <UTable v-if="0 < filtered.length && filtered.length < 200" :data="filtered" :columns="columns"/>
@@ -9,11 +9,11 @@
 </template>
 
 <script setup>
-const search = ref('')
+const query = ref('')
 
 const NUMBER_OF_DIGITS = 3
 
-function toWordSearchString(str) {
+function toWordqueryString(str) {
   return str
     .normalize()
     .toLowerCase()
@@ -24,7 +24,7 @@ function toWordSearchString(str) {
     .replaceAll(/[^a-z]/g, '')
 }
 
-function toNumbersSearchString(str) {
+function toNumbersqueryString(str) {
   const digits = str.match(/^[0-9]*/)[0].length
   for (let i = 0; i < NUMBER_OF_DIGITS - digits; i++) {
     str = '0' + str
@@ -36,7 +36,7 @@ const { data } = await useFetch('/data/hannover.json', {
   transform: (json) => {
     json.streetnumbers.forEach((streetnumber, index) => {
       streetnumber.id = index
-      streetnumber.street.searchString = toWordSearchString(streetnumber.street.name)
+      streetnumber.street.queryString = toWordqueryString(streetnumber.street.name)
     })
     return json
   }
@@ -71,12 +71,12 @@ const columns = [
 ]
 
 const filtered = computed(() => {
-  const parts = search.value.trim().split(' ')
-  const words = parts.filter(part => part.match(/^[^0-9]/)).map(toWordSearchString)
-  const numbers = parts.filter(part => part.match(/^[0-9]{1,3}[a-z]*$/i)).map(toNumbersSearchString)
+  const parts = query.value.trim().split(' ')
+  const words = parts.filter(part => part.match(/^[^0-9]/)).map(toWordqueryString)
+  const numbers = parts.filter(part => part.match(/^[0-9]{1,3}[a-z]*$/i)).map(toNumbersqueryString)
   const postalCodes = parts.filter(part => part.match(/^[0-9]{5}$/))
 
-  console.debug("search", search.value, { parts, words, numbers, postalCodes })
+  console.debug("query", query.value, { parts, words, numbers, postalCodes })
 
   if ((words.length == 0 && postalCodes.length == 0) ||
     numbers.length > 1 ||
@@ -89,7 +89,7 @@ const filtered = computed(() => {
   const postalCode = postalCodes[0]
 
   return data.value.streetnumbers.filter((row) => {
-    let streetName = row.street.searchString
+    let streetName = row.street.queryString
     for (const word of words) {
       const position = streetName.indexOf(word)
       if (position < 0) {
