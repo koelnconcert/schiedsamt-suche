@@ -10,7 +10,7 @@
     <template v-else-if="filtered.length > MAX_RESULTS">
       Zu viele Ergebnisse ({{ filtered.length }})
     </template>
-    <UTable v-else :data="filtered" :columns="columns" :grouping="[ 'stadtbezirk' ]" :grouping-options="groupingOptions" :expanded="true" :ui="ui" :meta="meta">
+    <UTable v-else :data="filtered" :columns="columns" :grouping="grouping" :grouping-options="groupingOptions" :expanded="true" :ui="ui" :meta="meta">
     </UTable>
   </div>
 </template>
@@ -69,14 +69,19 @@ const columns = [
     accessorKey: 'postalCode'
   },
   {
+    id: 'schiedsamtsbezirk',
+    header: 'Schiedsamtsbezirk',
+    accessorFn: (row) => labelSubdivision(row, 'schiedsamtsbezirk')
+  },
+  {
     id: 'stadtbezirk',
     header: 'Stadtbezirk',
-    accessorFn: labelStadtbezirk
+    accessorFn: (row) => labelSubdivision(row, 'stadtbezirk')
   },
   {
     id: 'stadtteil',
     header: 'Stadtteil',
-    accessorFn: labelStadtteil
+    accessorFn: (row) => labelSubdivision(row, 'stadtteil')
   }
 ]
 
@@ -124,6 +129,8 @@ const filtered = computed(() => {
   })
 })
 
+const grouping = ref([ 'schiedsamtsbezirk' ])
+
 const groupingOptions = ref({
   getGroupedRowModel: getGroupedRowModel()
 })
@@ -162,14 +169,6 @@ function labelNumbers(row) {
   }
 
   return label
-}
-
-function labelStadtbezirk(row) {
-  return labelSubdivision(row, 'stadtbezirk')
-}
-
-function labelStadtteil(row) {
-  return labelSubdivision(row, 'stadtteil')
 }
 
 function labelSubdivision(row, subdivisionType) {

@@ -66,6 +66,7 @@ worksheet.eachRow((row, rowNumber) => {
       odd: toMatch[3] !== 'g'
     },
     subdivision: {
+      schiedsamtsbezirk: Number(sb),
       stadtbezirk: Number(sb),
       stadtteil: stadt,
     },
@@ -95,6 +96,7 @@ assert.deepEqual([{
     even: true, odd: true
   },
   subdivision: {
+    schiedsamtsbezirk: 3,
     stadtbezirk: 3,
     stadtteil: 'ISE'
   },
@@ -116,6 +118,22 @@ assert.deepEqual([
 //
 
 console.log('save', outputFilename)
+
+const bezirke = {
+  1: 'Mitte',
+  2: 'Vahrenwald-List',
+  3: 'Bothfeld-Vahrenheide',
+  4: 'Buchholz-Kleefeld',
+  5: 'Misburg-Anderten',
+  6: 'Kirchrode-Bemerode-Wülferode',
+  7: 'Südstadt-Bult',
+  8: 'Döhren-Wülfel',
+  9: 'Ricklingen',
+  10: 'Linden-Limmer',
+  11: 'Ahlem-Badenstedt-Davenstedt',
+  12: 'Herrenhausen-Stöcken',
+  13: 'Nord'
+}
 const data = {
   source: {
     name: 'Straßenverzeichnis der Landeshauptstadt Hannover',
@@ -130,21 +148,8 @@ const data = {
   },
   streetnumbers,
   subdivisions: {
-    stadtbezirk: {
-      1: 'Mitte',
-      2: 'Vahrenwald-List',
-      3: 'Bothfeld-Vahrenheide',
-      4: 'Buchholz-Kleefeld',
-      5: 'Misburg-Anderten',
-      6: 'Kirchrode-Bemerode-Wülferode',
-      7: 'Südstadt-Bult',
-      8: 'Döhren-Wülfel',
-      9: 'Ricklingen',
-      10: 'Linden-Limmer',
-      11: 'Ahlem-Badenstedt-Davenstedt',
-      12: 'Herrenhausen-Stöcken',
-      13: 'Nord'
-    },
+    schiedsamtsbezirk: bezirke,
+    stadtbezirk: bezirke,
     stadtteil: {
       'AHL': 'Ahlem',
       'AND': 'Anderten',
