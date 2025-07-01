@@ -147,6 +147,16 @@ const data = {
     holder: 'Landeshauptstadt Hannover, FB Planen und Stadtentwicklung, Bereich Geoinformation'
   },
   streetnumbers,
+  schiedsamt: {
+    amtsgericht: {
+      name: 'Hannover',
+      url: 'https://amtsgericht-hannover.niedersachsen.de/startseite/service/schiedsamter/schiedsaemter-63478.html'
+    },
+    gemeinde: {
+      name: 'Hannover',
+      url: 'https://www.hannover.de/Leben-in-der-Region-Hannover/Verwaltungen-Kommunen/Die-Verwaltung-der-Landeshauptstadt-Hannover/Dezernate-und-Fachbereiche-der-LHH/Personal,-Digitalisierung-und-Recht/Fachbereich-Recht/Schieds%C3%A4mter-der-Landeshauptstadt'
+    }
+  },
   subdivisions: {
     schiedsamtsbezirk: bezirke,
     stadtbezirk: bezirke,

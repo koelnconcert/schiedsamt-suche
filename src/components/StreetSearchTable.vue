@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-1">
+    <div class="mb-2">
       <UInput class="w-full" v-model="query" placeholder="Nach Adresse suchen..." />
     </div>
     <template v-if="query.trim().length == 0"></template>
@@ -11,6 +11,26 @@
       Zu viele Ergebnisse ({{ filtered.length }})
     </template>
     <UTable v-else :data="filtered" :columns="columns" :grouping="grouping" :grouping-options="groupingOptions" :expanded="true" :ui="ui" :meta="meta">
+      <template #expanded="{ row }">
+        <div v-if="row.getIsGrouped()" class="flex items-baseline justify-between text-default">
+          <h2 class="text-lg">
+            Schiedsamt {{ data.schiedsamt.gemeinde.name }}
+            &ndash;
+            {{ labelSubdivision(row.original, 'schiedsamtsbezirk') }}
+          </h2>
+          <div>
+            <ExternalLink :to='data.schiedsamt.gemeinde.url'>
+              Gemeinde
+              {{ data.schiedsamt.gemeinde.name }}
+            </ExternalLink>
+            &bullet;
+            <ExternalLink :to='data.schiedsamt.amtsgericht.url'>
+              Amtsgericht
+              {{ data.schiedsamt.amtsgericht.name }}
+            </ExternalLink>
+          </div>
+        </div>
+      </template>
     </UTable>
   </div>
 </template>
@@ -132,16 +152,19 @@ const filtered = computed(() => {
 const grouping = ref([ 'schiedsamtsbezirk' ])
 
 const groupingOptions = ref({
+  groupedColumnMode: 'remove', 
   getGroupedRowModel: getGroupedRowModel()
 })
 
 const ui = ref({
+  tr: 'bg-elevated/70',
+  th: 'text-muted',
   td: 'empty:p-0' // hides expanded row if empty
 })
 
 const meta = ref({
   class: { 
-    tr: (row) => row.getIsGrouped() ? 'bg-elevated/90' : null 
+    tr: (row) => row.getIsGrouped() ? null : 'bg-elevated/50'
   }
 })
 
