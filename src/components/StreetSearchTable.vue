@@ -10,11 +10,14 @@
     <template v-else-if="filtered.length > MAX_RESULTS">
       Zu viele Ergebnisse ({{ filtered.length }})
     </template>
-    <UTable v-else :data="filtered" :columns="columns"/>
+    <UTable v-else :data="filtered" :columns="columns" :grouping="[ 'stadtbezirk' ]" :grouping-options="groupingOptions" :expanded="true" :ui="ui" :meta="meta">
+    </UTable>
   </div>
 </template>
 
 <script setup>
+import { getGroupedRowModel } from '@tanstack/vue-table'
+
 const query = ref('')
 
 const NUMBER_OF_DIGITS = 3
@@ -119,6 +122,20 @@ const filtered = computed(() => {
     }
     return true
   })
+})
+
+const groupingOptions = ref({
+  getGroupedRowModel: getGroupedRowModel()
+})
+
+const ui = ref({
+  td: 'empty:p-0' // hides expanded row if empty
+})
+
+const meta = ref({
+  class: { 
+    tr: (row) => row.getIsGrouped() ? 'bg-elevated/90' : null 
+  }
 })
 
 function trimLeadingZeros(str) {
