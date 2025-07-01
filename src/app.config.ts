@@ -1,13 +1,15 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      neutral: 'neutral' // default 'slate'
+      primary: 'blue',
+      secondary: 'emerald',
+      neutral: 'neutral'
     },
     link: {
       compoundVariants: [{
         active: false,
         disabled: false,
-        class: 'text-secondary hover:text-secondary-600'
+        class: 'text-primary hover:text-primary-600'
       }]
     }
   }

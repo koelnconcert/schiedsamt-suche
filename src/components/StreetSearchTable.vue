@@ -1,8 +1,31 @@
 <template>
   <div>
-    <div class="mb-2">
-      <UInput class="w-full" v-model="query" placeholder="Nach Adresse suchen..." />
-    </div>
+    <UButtonGroup class="mb-2 flex">
+      <UInput class="flex-grow" v-model="query" placeholder="Nach Adresse suchen..." />
+      <UModal title="Quellen und Lizenzen">
+        <UButton color="secondary" variant="link" class="cursor-pointer">Quellen und Lizenzen</UButton>
+        <template #body>
+          <h3 class="text-lg mb-2">{{ data.source.name }}</h3>
+          <div class="grid grid-cols-[auto_auto] gap-x-4 gap-y-2">
+            Links
+            <span>
+              <ExternalLink :to="data.source.website">Website</ExternalLink>
+              &bullet;
+              <ExternalLink :to="data.source.download">Download</ExternalLink>
+            </span>
+
+            Stand <span>{{ data.source.changed }}</span>
+
+            Lizenz 
+            <span>
+              <ExternalLink :to="data.license.url">{{ data.license.name }}</ExternalLink>
+              <br/>
+              {{ data.license.holder }}
+            </span>
+          </div>
+        </template>
+      </UModal>
+    </UButtonGroup>
     <template v-if="query.trim().length == 0"></template>
     <template v-else-if="filtered.length == 0">
       Keine Ergebnisse
@@ -10,7 +33,8 @@
     <template v-else-if="filtered.length > MAX_RESULTS">
       Zu viele Ergebnisse ({{ filtered.length }})
     </template>
-    <UTable v-else :data="filtered" :columns="columns" :grouping="grouping" :grouping-options="groupingOptions" :expanded="true" :ui="ui" :meta="meta">
+    <UTable v-else :data="filtered" :columns="columns" :grouping="grouping" :grouping-options="groupingOptions"
+      :expanded="true" :ui="ui" :meta="meta">
       <template #expanded="{ row }">
         <div v-if="row.getIsGrouped()" class="flex items-baseline justify-between text-default">
           <h2 class="text-lg">
@@ -149,10 +173,10 @@ const filtered = computed(() => {
   })
 })
 
-const grouping = ref([ 'schiedsamtsbezirk' ])
+const grouping = ref(['schiedsamtsbezirk'])
 
 const groupingOptions = ref({
-  groupedColumnMode: 'remove', 
+  groupedColumnMode: 'remove',
   getGroupedRowModel: getGroupedRowModel()
 })
 
@@ -163,7 +187,7 @@ const ui = ref({
 })
 
 const meta = ref({
-  class: { 
+  class: {
     tr: (row) => row.getIsGrouped() ? null : 'bg-elevated/50'
   }
 })
