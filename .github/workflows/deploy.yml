@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: "20"
       # Pick your own package manager and build script
-      - run: npm install
+      - run: npm ci
       - run: npm run data-download
       - run: npm run data-convert
       - run: npx nuxt build --preset github_pages
