@@ -28,9 +28,8 @@
       <TableColumnSelectorDropdown :table-api="table?.tableApi">
         <UButton label="Spalten" trailing-icon="i-lucide-chevron-down"/>
       </TableColumnSelectorDropdown>
-
     </div>
-    {{  breakpoints.active() }}
+    
     <UTable ref="table" :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
       :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions" v-model:column-visibility="columnVisibility">
       <template #expanded="{ row }">
