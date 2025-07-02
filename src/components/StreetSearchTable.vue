@@ -33,7 +33,7 @@
     <UTable ref="table" :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
       :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions">
       <template #expanded="{ row }">
-        <div v-if="row.getIsGrouped()" class="flex items-baseline justify-between text-default">
+        <div v-if="row.getIsGrouped()" class="flex flex-wrap items-baseline justify-between text-default">
           <h2 class="text-lg">
             Schiedsamt {{ data.schiedsamt.gemeinde.name }}
             &ndash;
