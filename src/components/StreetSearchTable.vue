@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UButtonGroup class="mb-2 flex">
+    <div class="mb-2 flex">
       <UInput class="flex-grow" v-model="query" placeholder="Nach Adresse suchen..." />
       <UModal title="Quellen und Lizenzen">
         <UButton color="secondary" variant="link" class="cursor-pointer">Quellen und Lizenzen</UButton>
@@ -25,8 +25,12 @@
           </div>
         </template>
       </UModal>
-    </UButtonGroup>
-    <UTable :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
+      <TableColumnSelectorDropdown :table-api="table?.tableApi">
+        <UButton label="Spalten" trailing-icon="i-lucide-chevron-down"/>
+      </TableColumnSelectorDropdown>
+
+    </div>
+    <UTable ref="table" :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
       :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions">
       <template #expanded="{ row }">
         <div v-if="row.getIsGrouped()" class="flex items-baseline justify-between text-default">
@@ -95,12 +99,14 @@ const columns = [
   {
     id: 'street',
     header: 'Straße',
-    accessorKey: 'street.name'
+    accessorKey: 'street.name',
+    enableHiding: false
   },
   {
     id: 'hausnummern',
     header: 'Hausnummern',
-    accessorFn: labelNumbers
+    accessorFn: labelNumbers,
+    enableHiding: false
   },
   {
     id: 'postalCode',
@@ -110,7 +116,8 @@ const columns = [
   {
     id: 'schiedsamtsbezirk',
     header: 'Schiedsamtsbezirk',
-    accessorFn: (row) => labelSubdivision(row, 'schiedsamtsbezirk')
+    accessorFn: (row) => labelSubdivision(row, 'schiedsamtsbezirk'),
+    enableHiding: false
   },
   {
     id: 'stadtbezirk',
