@@ -26,15 +26,8 @@
         </template>
       </UModal>
     </UButtonGroup>
-    <template v-if="query.trim().length == 0"></template>
-    <template v-else-if="filtered.length == 0">
-      Keine Ergebnisse
-    </template>
-    <template v-else-if="filtered.length > MAX_RESULTS">
-      Zu viele Ergebnisse ({{ filtered.length }})
-    </template>
-    <UTable v-else :data="filtered" :columns="columns" :grouping="grouping" :grouping-options="groupingOptions"
-      :expanded="true" :ui="ui" :meta="meta">
+    <UTable :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
+      :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions">
       <template #expanded="{ row }">
         <div v-if="row.getIsGrouped()" class="flex items-baseline justify-between text-default">
           <h2 class="text-lg">
@@ -61,8 +54,10 @@
 
 <script setup>
 import { getGroupedRowModel } from '@tanstack/vue-table'
+import { memo, getMemoOptions } from '@tanstack/vue-table'
 
 const query = ref('')
+const table = useTemplateRef('table')
 
 const NUMBER_OF_DIGITS = 3
 const MAX_RESULTS = 100
@@ -191,6 +186,40 @@ const meta = ref({
     tr: (row) => row.getIsGrouped() ? null : 'bg-elevated/50'
   }
 })
+
+
+const tooManyResults = ref(null)
+/**
+ * Do not show results at all if there are too many.
+ *
+ * <p>Hack: PaginationRowModel is one of the rowModel in UTable that has to be given explicitly.
+ * We use this to create a custom PaginationRowModel to return empty rows if there are too many rows.
+ */
+const paginationOptions = {
+  getPaginationRowModel(table) {
+    return memo(
+      () => [table.getPrePaginationRowModel()],
+      (rowModel) => {
+        const rowCount = rowModel.rows.length
+        if (rowCount > MAX_RESULTS) {
+          tooManyResults.value = rowCount
+          return {
+            rows: [],
+            flatRows: [],
+            rowsById: {}
+          }
+        }
+        tooManyResults.value = null
+        return rowModel
+      },
+      getMemoOptions(table.options, 'debugTable', 'getPaginationRowModel')
+    )
+  }
+}
+
+const emptyLabel = computed(() => tooManyResults.value 
+  ? 'Zu viele Ergebnisse (' + tooManyResults.value + ')' 
+  : 'Keine Ergebnisse')
 
 function trimLeadingZeros(str) {
   return str.replaceAll(/^0+/g, '') || '0'
