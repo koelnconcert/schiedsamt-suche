@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="mb-2 flex">
-      <UInput class="flex-grow" v-model="query" placeholder="Nach Adresse suchen..." />
+    <div class="mb-2 flex flex-wrap gap-2">
+      <UInput class="max-sm:w-full sm:flex-grow" v-model="query" placeholder="Nach Adresse suchen..." />
       <UModal title="Quellen und Lizenzen">
         <UButton color="secondary" variant="link" class="cursor-pointer">Quellen und Lizenzen</UButton>
         <template #body>
@@ -29,7 +29,7 @@
         <UButton label="Spalten" trailing-icon="i-lucide-chevron-down"/>
       </TableColumnSelectorDropdown>
     </div>
-    
+
     <UTable ref="table" :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
       :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions" v-model:column-visibility="columnVisibility">
       <template #expanded="{ row }">
@@ -72,6 +72,7 @@ const MAX_RESULTS = 100
 const columnVisibility = ref({
   stadtbezirk: breakpoints.isGreaterOrEqual('lg'),
   stadtteil: breakpoints.isGreaterOrEqual('lg'),
+  postalCode: breakpoints.isGreaterOrEqual('sm'),
 })
 
 function toWordqueryString(str) {
