@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   ssr: false,
   modules: [
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@vueuse/nuxt'
   ],
   css: [
     '~/assets/css/main.css'

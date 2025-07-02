@@ -30,8 +30,9 @@
       </TableColumnSelectorDropdown>
 
     </div>
+    {{  breakpoints.active() }}
     <UTable ref="table" :data="filtered" :columns="columns" :empty="emptyLabel" :grouping="grouping" :grouping-options="groupingOptions"
-      :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions">
+      :expanded="true" :ui="ui" :meta="meta" :pagination-options="paginationOptions" v-model:column-visibility="columnVisibility">
       <template #expanded="{ row }">
         <div v-if="row.getIsGrouped()" class="flex flex-wrap items-baseline justify-between text-default">
           <h2 class="text-lg">
@@ -59,12 +60,20 @@
 <script setup>
 import { getGroupedRowModel } from '@tanstack/vue-table'
 import { memo, getMemoOptions } from '@tanstack/vue-table'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 const query = ref('')
 const table = useTemplateRef('table')
+const breakpoints = useBreakpoints(breakpointsTailwind)
 
 const NUMBER_OF_DIGITS = 3
 const MAX_RESULTS = 100
+
+// set _initial_ column visibility based on breakpoints
+const columnVisibility = ref({
+  stadtbezirk: breakpoints.isGreaterOrEqual('lg'),
+  stadtteil: breakpoints.isGreaterOrEqual('lg'),
+})
 
 function toWordqueryString(str) {
   return str
